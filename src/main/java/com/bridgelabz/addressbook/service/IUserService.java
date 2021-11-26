@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface IUserService {
     User saveUser(UserDTO userDTO);
-    List<User> fetchUsers();
+    List<User> fetchUsersDataLists();
+    User fetchUserById(UserDTO userDTO, long id);
 }

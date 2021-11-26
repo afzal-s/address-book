@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook.model;
 
 import com.bridgelabz.addressbook.dto.AddressDTO;
+import com.bridgelabz.addressbook.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,15 +25,15 @@ public class Address {
     private String country;
     private String postCode;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "address")
     @JsonBackReference
     private User user;
 
     public Address(AddressDTO addressDTO) {
-        this.street = addressDTO.street;
-        this.city = addressDTO.city;
-        this.state = addressDTO.state;
-        this.country = addressDTO.country;
-        this.postCode = addressDTO.postCode;
+        this.street = addressDTO.getStreet();
+        this.city = addressDTO.getCity();
+        this.state = addressDTO.getState();
+        this.country = addressDTO.getCountry();
+        this.postCode = addressDTO.getPostCode();
     }
 }

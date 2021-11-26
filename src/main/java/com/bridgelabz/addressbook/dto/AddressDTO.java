@@ -1,11 +1,17 @@
 package com.bridgelabz.addressbook.dto;
 
-public class AddressDTO {
-    public String street;
-    public String city;
-    public String state;
-    public String country;
-    public String postCode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public AddressDTO() {}
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddressDTO {
+    private String street;
+    private String city;
+    private String state;
+    private String country;
+    private String postCode;
 }
+
