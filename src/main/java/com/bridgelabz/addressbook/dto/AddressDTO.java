@@ -14,4 +14,3 @@ public class AddressDTO {
     private String country;
     private String postCode;
 }
-
