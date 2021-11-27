@@ -12,10 +12,11 @@ import org.springframework.stereotype.Component;
 public class ResponseDTO {
     private Long statusCode;
     private String message;
-    private Object data;
+    private Object token;
 
     public ResponseDTO(long statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
     }
+
 }

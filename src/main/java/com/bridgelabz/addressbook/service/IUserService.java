@@ -4,12 +4,17 @@ import com.bridgelabz.addressbook.dto.UserDTO;
 import com.bridgelabz.addressbook.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IUserService {
-    User saveUser(UserDTO userDTO);
-    List<User> fetchUsersDataLists();
-    User fetchUserById(UserDTO userDTO, long id);
-    void deleteUserById(long id);
-    User updateUserById(UserDTO userDTO, long id);
+    List<User> fetchUsersDataLists(); // Working
+    User fetchUserById(String token); // Working
+    List<User> fetchSortedUsersDataLists(); // Working
+    List<User> fetchUserByFirstName(String firstName); // Working
+    List<User> fetchUserDataByCityName(String city);
+    List<User> fetchUserDataByPostCode(String postCode);
+
+    User saveUser(UserDTO userDTO); // Working
+    void deleteUserById(long id); // Working
+    User updateUserById(UserDTO userDTO, String token); // Working
+
 }

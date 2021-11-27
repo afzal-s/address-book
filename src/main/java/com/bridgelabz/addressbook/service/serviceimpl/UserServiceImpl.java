@@ -5,7 +5,9 @@ import com.bridgelabz.addressbook.model.Address;
 import com.bridgelabz.addressbook.model.User;
 import com.bridgelabz.addressbook.repository.IUserRepository;
 import com.bridgelabz.addressbook.service.IUserService;
+import com.bridgelabz.addressbook.util.UToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +19,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private UToken tokenutil;
 
     @Override
     public User saveUser(UserDTO userDTO) {
@@ -33,8 +38,31 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User fetchUserById(UserDTO userDTO, long id) {
-        return userRepository.findById(id).get();
+    public User fetchUserById(String token) {
+        return userRepository.findById(tokenutil.decodeToken(token)).get();
+    }
+
+    @Override
+    public List<User> fetchSortedUsersDataLists() {
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
+    }
+
+    @Override
+    public List<User> fetchUserByFirstName(String firstName) {
+        List<User> byFirstName = userRepository.findUserByFirstName(firstName);
+        return byFirstName;
+    }
+
+    @Override
+    public List<User> fetchUserDataByCityName(String city) {
+//        List<User> usersDataByCity = userRepository.findAllByCity(city);
+//        return usersDataByCity;
+        return null;
+    }
+
+    @Override
+    public List<User> fetchUserDataByPostCode(String postCode) {
+        return null;
     }
 
     @Override
@@ -43,8 +71,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User updateUserById(UserDTO userDTO, long id) {
-        Optional<User> userData = userRepository.findById(id);
+    public User updateUserById(UserDTO userDTO, String token) {
+        Optional<User> userData = userRepository.findById(tokenutil.decodeToken(token));
         if (userData.isPresent()) {
             userData.get().setFirstName(userDTO.getFirstName());
             userData.get().setLastName(userDTO.getLastName());
@@ -64,4 +92,5 @@ public class UserServiceImpl implements IUserService {
         }
         return null;
     }
+
 }

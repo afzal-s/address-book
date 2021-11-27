@@ -10,21 +10,24 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-//    @Pattern( regexp="^[A-Z]{1}[a-zA-Z\\s]{2,}$",
-//            message = "First Letter Should Be Capital")
+    @Pattern( regexp="^[A-Z]{1}[a-zA-Z\\s]{2,}$",
+            message = "First Letter Should Be Capital")
     private String firstName;
+
+    @Pattern( regexp="^[A-Z]{1}[a-zA-Z\\s]{2,}$",
+            message = "First Letter Should Be Capital")
     private String lastName;
 
-//    @Pattern(regexp="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
-//            message="Email Is Not Valid")
+    @Pattern(regexp="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
+            message="Email Is Not Valid")
     private String email;
 
-//    @Pattern(regexp="Male|Female",
-//            message="Gender Should Be Male Or Female")
+    @Pattern(regexp="Male|Female",
+            message="Gender Should Be Male Or Female")
     private String gender;
 
-//    @Pattern(regexp="^(\\+\\d{1,3}[- ]?)?\\d{10}$",
-//            message="Mobile is not in proper format")
+    @Pattern(regexp="^(\\+\\d{1,3}[- ]?)?\\d{10}$",
+            message="Mobile is not in proper format")
     private String mobileNumber;
 
     private AddressDTO address;
