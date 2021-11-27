@@ -49,20 +49,20 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> fetchUserByFirstName(String firstName) {
-        List<User> byFirstName = userRepository.findUserByFirstName(firstName);
+        List<User> byFirstName = userRepository.findUsersByFirstName(firstName);
         return byFirstName;
     }
 
     @Override
     public List<User> fetchUserDataByCityName(String city) {
-//        List<User> usersDataByCity = userRepository.findAllByCity(city);
-//        return usersDataByCity;
-        return null;
+        List<User> usersDataByCity = userRepository.findUsersByCity(city);
+        return usersDataByCity;
     }
 
     @Override
     public List<User> fetchUserDataByPostCode(String postCode) {
-        return null;
+        List<User> usersDataByCity = userRepository.findUsersByPostCode(postCode);
+        return usersDataByCity;
     }
 
     @Override

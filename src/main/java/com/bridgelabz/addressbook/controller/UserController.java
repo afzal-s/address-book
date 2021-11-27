@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,14 +36,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-    @GetMapping("/users/city") // Not Working
+    @GetMapping("/users/city")
     public ResponseEntity<ResponseDTO> fetchUserDataByCityName(@RequestParam String city) {
         List<User> usersByCity = userService.fetchUserDataByCityName(city);
         ResponseDTO responseDTO = new ResponseDTO((long) 200, "Fetched All Users By Given City", usersByCity);
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-    @GetMapping("/users/postcode") // Not Working
+    @GetMapping("/users/postcode")
     public ResponseEntity<ResponseDTO> fetchUserDataByPostCode(@RequestParam String postCode) {
         List<User> userDataByPostCode = userService.fetchUserDataByPostCode(postCode);
         ResponseDTO responseDTO = new ResponseDTO((long) 200, "Fetched All Users By Given PostCode", userDataByPostCode);
@@ -65,7 +66,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<ResponseDTO> saveUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> saveUser(@Valid @RequestBody UserDTO userDTO) {
         User userData = userService.saveUser(userDTO);
         ResponseDTO responseDTO = new ResponseDTO((long) 201, "User Created.",
                 tokenutil.generateToken(userData.getId()));
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<ResponseDTO> updateUserById(@RequestBody UserDTO userDTO, @RequestHeader String token) {
+    public ResponseEntity<ResponseDTO> updateUserById(@Valid @RequestBody UserDTO userDTO, @RequestHeader String token) {
         User userData = userService.updateUserById(userDTO, token);
         ResponseDTO responseDTO = new ResponseDTO((long) 200, "Updated User Data Of Given Id " +
                 tokenutil.decodeToken(token), userData);
