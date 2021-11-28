@@ -22,4 +22,7 @@ public interface IUserRepository extends JpaRepository<User, Long> {
             nativeQuery = true)
      List<User> findUsersByPostCode(String postCode);
 
+    @Query(value = "SELECT * FROM user_tb WHERE mobile_number = ?1", nativeQuery = true)
+    User findUsersByMobileNumber(String mobileNumber);
+
 }

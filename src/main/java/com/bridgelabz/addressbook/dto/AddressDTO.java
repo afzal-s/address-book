@@ -32,8 +32,8 @@ public class AddressDTO {
     @NotBlank
     private String country;
 
-    @Pattern( regexp="^[A-Z]{1}[a-zA-Z\\s]{2,}$",
-            message = "First Letter Should Be Capital")
+    @Pattern( regexp="^[1-9]{1}[0-9]{2}[0-9]{3}$",
+            message = "Enter 6 Digit Pin Code")
     @NotBlank
     private String postCode;
 }

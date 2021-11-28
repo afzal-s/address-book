@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
-    @GetMapping("/users/postcode")
+    @GetMapping("/users/postcode") // Not Working
     public ResponseEntity<ResponseDTO> fetchUserDataByPostCode(@RequestParam String postCode) {
         List<User> userDataByPostCode = userService.fetchUserDataByPostCode(postCode);
         ResponseDTO responseDTO = new ResponseDTO((long) 200, "Fetched All Users By Given PostCode", userDataByPostCode);
@@ -75,7 +75,7 @@ public class UserController {
 
     @DeleteMapping("/user")
     public ResponseEntity<ResponseDTO> deleteUserById(@RequestHeader String token) {
-        userService.deleteUserById(tokenutil.decodeToken(token));
+        userService.deleteUserById(token);
         ResponseDTO responseDTO = new ResponseDTO((long) 200, "Deleted User Data Of Given Id: " +
                 tokenutil.decodeToken(token));
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);

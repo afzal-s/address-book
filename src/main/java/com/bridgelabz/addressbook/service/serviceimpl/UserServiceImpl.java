@@ -1,6 +1,8 @@
 package com.bridgelabz.addressbook.service.serviceimpl;
 
 import com.bridgelabz.addressbook.dto.UserDTO;
+import com.bridgelabz.addressbook.exception.UserAlreadyExistsException;
+import com.bridgelabz.addressbook.exception.UserNotFoundException;
 import com.bridgelabz.addressbook.model.Address;
 import com.bridgelabz.addressbook.model.User;
 import com.bridgelabz.addressbook.repository.IUserRepository;
@@ -25,53 +27,81 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User saveUser(UserDTO userDTO) {
-        User user = new User(userDTO);
-        Address address = user.getAddress();
-        user.setAddress(address);
-        address.setUser(user);
-        return userRepository.save(user);
+        User AlreadyExists = userRepository.findUsersByMobileNumber(userDTO.getMobileNumber());
+        if (AlreadyExists == null) {
+            User user = new User(userDTO);
+            Address address = user.getAddress();
+
+            user.setAddress(address);
+            address.setUser(user);
+            return userRepository.save(user);
+        } else {
+            throw new UserAlreadyExistsException("User Already Exists");
+
+        }
     }
 
     @Override
-    public List<User> fetchUsersDataLists() {
-        return userRepository.findAll();
+    public List<User> fetchUsersDataLists() throws UserNotFoundException {
+        List<User> usersList = userRepository.findAll();
+        if (usersList.isEmpty())
+            throw new UserNotFoundException("No Data Present");
+        return usersList;
     }
 
     @Override
-    public User fetchUserById(String token) {
+    public User fetchUserById(String token) throws UserNotFoundException {
+        Optional<User> userData = userRepository.findById(tokenutil.decodeToken(token));
+        if (userData.isEmpty())
+            throw new UserNotFoundException("User Not Found Of Given Id: " + tokenutil.decodeToken(token));
         return userRepository.findById(tokenutil.decodeToken(token)).get();
     }
 
     @Override
-    public List<User> fetchSortedUsersDataLists() {
-        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
+    public List<User> fetchSortedUsersDataLists() throws UserNotFoundException {
+        List<User> usersInSortedOrder = userRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName"));
+        if (usersInSortedOrder.isEmpty())
+            throw new UserNotFoundException("No Data Present");
+        return usersInSortedOrder;
     }
 
     @Override
-    public List<User> fetchUserByFirstName(String firstName) {
-        List<User> byFirstName = userRepository.findUsersByFirstName(firstName);
-        return byFirstName;
+    public List<User> fetchUserByFirstName(String firstName) throws UserNotFoundException {
+        List<User> usersDataByFirstName = userRepository.findUsersByFirstName(firstName);
+        if (usersDataByFirstName.isEmpty())
+            throw new UserNotFoundException("No Data Present");
+        return usersDataByFirstName;
     }
 
     @Override
-    public List<User> fetchUserDataByCityName(String city) {
-        List<User> usersDataByCity = userRepository.findUsersByCity(city);
-        return usersDataByCity;
+    public List<User> fetchUserDataByCityName(String city) throws UserNotFoundException {
+        List<User> usersByCity = userRepository.findUsersByCity(city);
+        if (usersByCity.isEmpty())
+            throw new UserNotFoundException("User Not Present Of " + city + " City");
+        return usersByCity;
     }
 
     @Override
-    public List<User> fetchUserDataByPostCode(String postCode) {
-        List<User> usersDataByCity = userRepository.findUsersByPostCode(postCode);
-        return usersDataByCity;
+    public List<User> fetchUserDataByPostCode(String postCode) throws UserNotFoundException {
+        List<User> usersByPostCode = userRepository.findUsersByPostCode(postCode);
+        if (usersByPostCode.isEmpty())
+            throw new UserNotFoundException("User Not Present Of " + postCode + " PostCode");
+        return usersByPostCode;
     }
 
     @Override
-    public void deleteUserById(long id) {
-        userRepository.deleteById(id);
+    public User deleteUserById(String token) throws UserNotFoundException {
+        if (userRepository.findById(tokenutil.decodeToken(token)).isPresent()) {
+            User deletedUser = fetchUserById(token);
+            userRepository.deleteById(tokenutil.decodeToken(token));
+            return deletedUser;
+        } else {
+            throw new UserNotFoundException(tokenutil.decodeToken(token) + " Given Id Is Not Present");
+        }
     }
 
     @Override
-    public User updateUserById(UserDTO userDTO, String token) {
+    public User updateUserById(UserDTO userDTO, String token) throws UserNotFoundException {
         Optional<User> userData = userRepository.findById(tokenutil.decodeToken(token));
         if (userData.isPresent()) {
             userData.get().setFirstName(userDTO.getFirstName());
@@ -89,8 +119,9 @@ public class UserServiceImpl implements IUserService {
             address.setPostCode(userDTO.getAddress().getPostCode());
 
             return userRepository.save(userData.get());
+        } else {
+            throw new UserNotFoundException("User Not Found");
         }
-        return null;
     }
 
 }
