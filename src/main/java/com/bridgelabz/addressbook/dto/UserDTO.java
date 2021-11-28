@@ -26,6 +26,9 @@ public class UserDTO {
     @NotEmpty(message = "Email Should Not Be Empty")
     private String email;
 
+    @NotEmpty
+    private String password;
+
     @Pattern(regexp="male|female",
             message="Gender Should Be Male Or Female")
     private String gender;

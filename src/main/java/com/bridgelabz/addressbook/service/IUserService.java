@@ -17,4 +17,5 @@ public interface IUserService {
     User saveUser(UserDTO userDTO) throws UserAlreadyExistsException;
     User deleteUserById(String token) throws UserNotFoundException;
     User updateUserById(UserDTO userDTO, String token) throws UserNotFoundException;
+    String loginByEmailAndPassword(String email, String password);
 }

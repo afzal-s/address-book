@@ -89,4 +89,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<ResponseDTO> loginByEmailAndPassword(@RequestHeader String email, @RequestHeader String password) {
+        String userToken = userService.loginByEmailAndPassword(email, password);
+        ResponseDTO responseDTO = new ResponseDTO((long) 200, "User Logged In Info", userToken);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
+
 }

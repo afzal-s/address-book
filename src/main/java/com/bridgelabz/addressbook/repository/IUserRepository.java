@@ -25,4 +25,6 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user_tb WHERE mobile_number = ?1", nativeQuery = true)
     User findUsersByMobileNumber(String mobileNumber);
 
+    @Query(value = "SELECT * FROM user_tb WHERE email = ?1", nativeQuery = true)
+    User findUsersByEmail(String email);
 }

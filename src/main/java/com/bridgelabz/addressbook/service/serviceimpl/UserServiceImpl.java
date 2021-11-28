@@ -11,12 +11,14 @@ import com.bridgelabz.addressbook.util.UToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Validated
 public class UserServiceImpl implements IUserService {
 
     @Autowired
@@ -37,7 +39,6 @@ public class UserServiceImpl implements IUserService {
             return userRepository.save(user);
         } else {
             throw new UserAlreadyExistsException("User Already Exists");
-
         }
     }
 
@@ -121,6 +122,21 @@ public class UserServiceImpl implements IUserService {
             return userRepository.save(userData.get());
         } else {
             throw new UserNotFoundException("User Not Found");
+        }
+    }
+
+    @Override
+    public String loginByEmailAndPassword(String email, String password) {
+        User user = userRepository.findUsersByEmail(email);
+        if (user != null) {
+            if (user.getPassword().equals(password)) {
+                String token = tokenutil.generateToken(user.getId());
+                return token;
+            }  else {
+                return "Password Not Matched";
+            }
+        } else {
+            throw new UserNotFoundException("No Email Found");
         }
     }
 

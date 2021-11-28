@@ -22,6 +22,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private String gender;
     private String mobileNumber;
 
@@ -38,6 +39,7 @@ public class User {
         this.email = userDTO.getEmail();
         this.mobileNumber = userDTO.getMobileNumber();
         this.gender = userDTO.getGender();
+        this.password = userDTO.getPassword();
         this.address = new Address(userDTO.getAddress());
         this.registerDate = LocalDate.now();
     }
